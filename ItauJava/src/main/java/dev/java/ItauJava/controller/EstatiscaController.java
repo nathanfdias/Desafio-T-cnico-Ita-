@@ -9,10 +9,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import dev.java.ItauJava.Properties.EstatisticaProperties;
 import dev.java.ItauJava.Repository.TransacaoRepository;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
-
+@Slf4j
 @RestController
 @RequestMapping("/estatistica")
 public class EstatiscaController {
@@ -25,11 +26,14 @@ public class EstatiscaController {
 
     @GetMapping("path")
     public ResponseEntity<?> estatistica() {
+
+        log.info("Calculando estatistica de transações: ");
         
         final var horaInicial = OffsetDateTime.now()
             .minusSeconds(estatisticaProperties.segundos());
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(transacaoRepository
+            .estatistica(horaInicial));
     }
     
 }
